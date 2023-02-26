@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { auth, db } from '../firebase';
 import { signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import { addDoc, collection, getDocs } from 'firebase/firestore';
+import { addDoc, collection, getDocs, deleteDoc } from 'firebase/firestore';
 
 const Home = () => {
   const [drivers, setDrivers] = useState([]);
@@ -14,7 +14,9 @@ const Home = () => {
   }
 
   const colRef = collection(db, "drivers");
-  getDocs(colRef)
+
+  const readDocs = () => {
+    getDocs(colRef)
     .then((snapshot) => {
       snapshot.docs.forEach((doc) => {
         setDrivers({ ...doc.data(), id: doc.id})
@@ -24,6 +26,14 @@ const Home = () => {
     .catch(err => {
       console.log(err.message);
     })
+  }
+  
+  const addDocs = () => {
+    addDoc(colRef, {
+      name: "No"
+    })
+  }
+
     
 
   return (
